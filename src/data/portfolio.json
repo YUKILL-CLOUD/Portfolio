@@ -1,0 +1,147 @@
+{
+  "profile": {
+    "name": "Paul Bernard Bartolo",
+    "role": "Full Stack Developer, Kajabi & GHL Expert",
+    "location": "Philippines",
+    "bio": "I create robust automation systems and high-performance web applications.",
+    "avatar": "/profile_picture.png"
+  },
+  "stats": [
+    {
+      "label": "Years Experience",
+      "value": "7+"
+    },
+    {
+      "label": "Projects Completed",
+      "value": "50+"
+    },
+    {
+      "label": "Clients",
+      "value": "30+"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "title": "Supercards",
+      "category": "Mobile App",
+      "image": "/mobile_banking_app_ui.png",
+      "link": "#",
+      "description": "A next-gen fintech app focusing on seamless card management and instant transfers.",
+      "longDescription": "Supercards revolutionizes how users interact with their finances. We focused on a dark, neon-accented UI that feels futuristic yet accessible. Key features include real-time transaction tracking, instant peer-to-peer transfers, and smart budgeting insights.",
+      "technologies": [
+        "React Native",
+        "Node.js",
+        "Framer Motion"
+      ],
+      "gallery": [
+        "/mobile_banking_app_ui.png",
+        "/mobile_banking_details_ui.png"
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Cart Redesign",
+      "category": "E-commerce",
+      "image": "/ecommerce_cart_ui.png",
+      "link": "#",
+      "description": "Optimizing the checkout flow to reduce cart abandonment by 23%.",
+      "longDescription": "This redesign project aimed to simplify the checkout process for a major e-commerce retailer. By removing distractions and implementing a linear step-process, we successfully increased conversion rates and reduced cart abandonment significantly.",
+      "technologies": [
+        "Figma",
+        "User Testing",
+        "Prototyping"
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Analytics Pro",
+      "category": "SaaS Dashboard",
+      "image": "/saas_dashboard_ui.png",
+      "link": "#",
+      "description": "A comprehensive data visualization platform for enterprise metrics.",
+      "longDescription": "Analytics Pro handles millions of data points to provide real-time insights for enterprise clients. The challenge was organizing complex data sets into an intuitive, digestible dashboard without compromising on depth.",
+      "technologies": [
+        "Next.js",
+        "D3.js",
+        "Tailwind CSS"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "id": "1",
+      "company": "Lenskart",
+      "role": "Product Designer",
+      "period": "2022 - Present",
+      "description": "Led the redesign of the mobile app."
+    },
+    {
+      "id": "2",
+      "company": "Oyo",
+      "role": "UI/UX Designer",
+      "period": "2020 - 2022",
+      "description": "Improved booking conversion by 15%."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Kajabi & GHL",
+      "level": 95
+    },
+    {
+      "name": "Next.js & React",
+      "level": 90
+    },
+    {
+      "name": "Development & API",
+      "level": 92
+    },
+    {
+      "name": "Adobe Creative Cloud",
+      "level": 85
+    }
+  ],
+  "services": [
+    {
+      "title": "Web & App Development",
+      "description": "Building high-performance applications with Next.js, React Native, and Node.js.",
+      "icon": "Code"
+    },
+    {
+      "title": "Kajabi & GHL Automation",
+      "description": "Architecting complete marketing funnels, CRM setups, and business automation workflows.",
+      "icon": "Zap"
+    },
+    {
+      "title": "Design & Editing",
+      "description": "Creating compelling visuals and video content using the full Adobe Creative Suite.",
+      "icon": "Palette"
+    },
+    {
+      "title": "Growth Strategy",
+      "description": "Data-driven optimization of user journeys to maximize conversion and engagement.",
+      "icon": "TrendingUp"
+    }
+  ],
+  "testimonials": [
+    {
+      "name": "Sarah Miller",
+      "role": "CEO at Technic",
+      "content": "Paul transformed our outdated platform into a modern masterpiece. The attention to detail is unmatched.",
+      "avatar": "/avatars/sarah.jpg"
+    },
+    {
+      "name": "James Carter",
+      "role": "Founder of AutomateIt",
+      "content": "The automation workflows Paul set up saved us 20 hours a week. Truly an expert in GHL.",
+      "avatar": "/avatars/james.jpg"
+    },
+    {
+      "name": "Emily Chen",
+      "role": "Product Manager",
+      "content": "Incredible communication and speed. The best developer we've worked with.",
+      "avatar": "/avatars/emily.jpg"
+    }
+  ]
+}
