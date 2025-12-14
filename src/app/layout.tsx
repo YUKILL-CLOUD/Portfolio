@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Alex Smith | Digital Product Designer",
-  description: "Futuristic portfolio website and digital experience.",
+  title: "Paul B, Bartolo | Jack of All",
+  description: "Can do all things through Paul.",
 };
 
 export default function RootLayout({
