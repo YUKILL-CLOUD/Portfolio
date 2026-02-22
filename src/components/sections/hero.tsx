@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Reveal } from "@/components/animations/reveal"
 import { GridTrail } from "@/components/animations/grid-trail"
+import { SwipeButton } from "@/components/ui/swipe-button"
 
 export function Hero({ data }: { data: any }) {
     if (!data) return null
@@ -47,32 +48,24 @@ export function Hero({ data }: { data: any }) {
                         </Reveal>
 
                         <Reveal delay={0.3}>
-                            <Button size="lg" className="h-16 pl-8 pr-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 text-lg font-bold group shadow-[0_0_20px_-5px_var(--primary)] hover:shadow-[0_0_30px_-5px_var(--primary)] transition-all duration-300 flex items-center gap-4" asChild>
-                                <Link href="#projects">
-                                    See my works
-                                    <span className="h-12 w-12 bg-white text-black rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                            <polyline points="12 5 19 12 12 19"></polyline>
-                                        </svg>
-                                    </span>
-                                </Link>
-                            </Button>
+                            <SwipeButton text="See my works" />
                         </Reveal>
                     </div>
                 </div>
             </div>
 
             {/* Huge Background Text (Middle Layer) */}
-            <div className="absolute -bottom-4 md:-bottom-8 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none z-40 leading-none mix-blend-overlay">
-                {/* Added mix-blend-overlay to make it look a bit more integrated/transparent if user wants opacity, else remove it if they want SOLID. User asked for solid overlapping image. */}
-                <span className="text-[25vw] font-bold text-white tracking-tighter select-none">
-                    {firstName}
-                </span>
+            <div className="absolute bottom-12 md:-bottom-8 left-1/2 -translate-x-1/2 w-full text-center pointer-events-none z-40 leading-none opacity-20 md:opacity-100 md:mix-blend-overlay">
+                <Reveal delay={0.4} width="100%">
+                    <span className="text-[35vw] md:text-[25vw] font-bold text-white tracking-tighter select-none">
+                        {firstName}
+                    </span>
+                </Reveal>
             </div>
 
-            {/* Image Layer (Bottom Layer) */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-30 flex justify-center items-end w-full pointer-events-none">
+            {/* Image Layer (Bottom Layer) - Temporarily hidden until a cleaner image is provided */}
+            {/* 
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-30 hidden md:flex justify-center items-end w-full pointer-events-none">
                 <Reveal delay={0.4} width="100%">
                     <div className="relative flex justify-center items-end">
                         {data.profile.avatar ? (
@@ -88,6 +81,7 @@ export function Hero({ data }: { data: any }) {
                     </div>
                 </Reveal>
             </div>
+            */}
         </section>
     )
 }

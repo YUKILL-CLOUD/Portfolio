@@ -58,18 +58,28 @@ export function Projects({ data }: { data: any }) {
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent z-10" />
 
-                                        <div className="p-8 absolute bottom-0 left-0 z-20 w-full translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                                            <span className="text-primary text-xs font-medium uppercase tracking-wider mb-2 block">{project.category}</span>
-                                            <div className="flex justify-between items-end">
-                                                <div>
-                                                    <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
-                                                    <p className="text-zinc-400 text-sm line-clamp-2 max-w-[90%] opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-4 group-hover:translate-y-0 delay-75">
-                                                        {project.description || "A showcase of high-performance digital product design."}
-                                                    </p>
+                                        <div className="p-6 md:p-8 absolute bottom-0 left-0 z-20 w-full flex flex-col justify-end">
+                                            <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                                                <div className="mb-2">
+                                                    <span className="text-primary text-[10px] md:text-xs font-bold uppercase tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] block">
+                                                        {project.category}
+                                                    </span>
                                                 </div>
-                                                <Button size="icon" variant="neon" className="rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                                                    <ArrowUpRight className="h-4 w-4" />
-                                                </Button>
+                                                <div className="flex justify-between items-end gap-4">
+                                                    <div className="w-full">
+                                                        <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">{project.title}</h3>
+                                                        <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out">
+                                                            <div className="overflow-hidden">
+                                                                <p className="text-zinc-400 text-sm line-clamp-2 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                                                                    {project.description || "A showcase of high-performance digital product design."}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <Button size="icon" variant="neon" className="rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 shrink-0 mb-1 pointer-events-none group-hover:pointer-events-auto">
+                                                        <ArrowUpRight className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -169,7 +179,11 @@ export function Projects({ data }: { data: any }) {
                             <div className="p-8 md:p-12">
                                 <div className="flex flex-wrap gap-4 items-start justify-between mb-8">
                                     <div>
-                                        <span className="text-primary text-sm font-medium uppercase tracking-wider mb-2 block">{selectedProject.category}</span>
+                                        <div className="mb-3">
+                                            <span className="text-primary text-[10px] md:text-xs font-bold uppercase tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] block">
+                                                {selectedProject.category}
+                                            </span>
+                                        </div>
                                         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{selectedProject.title}</h2>
                                         <div className="flex flex-wrap gap-2">
                                             {selectedProject.technologies?.map((tech: string) => (
@@ -180,7 +194,7 @@ export function Projects({ data }: { data: any }) {
                                         </div>
                                     </div>
                                     <Button size="lg" variant="neon" asChild>
-                                        <Link href={selectedProject.link || "#"}>
+                                        <Link href={selectedProject.link || "#"} target="_blank" rel="noopener noreferrer">
                                             View Project <ArrowUpRight className="ml-2 h-4 w-4" />
                                         </Link>
                                     </Button>

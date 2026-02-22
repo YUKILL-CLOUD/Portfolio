@@ -17,7 +17,7 @@ export function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
-        <nav className="fixed top-0 z-50 w-full border-b border-white/5 bg-zinc-950/80 backdrop-blur-xl">
+        <nav className="fixed top-0 z-[100] w-full border-b border-white/5 bg-zinc-950/80 backdrop-blur-xl">
             <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
                 <Link href="/" className="text-xl font-bold tracking-tighter hover:text-primary transition-colors">
                     Paul Bartolo<span className="text-primary">.</span>

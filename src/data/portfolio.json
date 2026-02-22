@@ -23,16 +23,15 @@
   "projects": [
     {
       "id": "1",
-      "title": "Supercards",
-      "category": "Mobile App",
-      "image": "/mobile_banking_app_ui.png",
-      "link": "#",
-      "description": "A next-gen fintech app focusing on seamless card management and instant transfers.",
-      "longDescription": "Supercards revolutionizes how users interact with their finances. We focused on a dark, neon-accented UI that feels futuristic yet accessible. Key features include real-time transaction tracking, instant peer-to-peer transfers, and smart budgeting insights.",
+      "title": "Z-budgeting",
+      "category": "Financial App",
+      "image": "/zbudget.png",
+      "link": "https://z-budgeting.vercel.app/",
+      "description": "Take full control of your finances with ZeroBudget, the simple and intuitive budgeting app",
+      "longDescription": "designed to track your income, expenses, and savings effortlessly. Stay on top of your spending, set financial goals, and make smarter money decisions—all without the stress or complexity.",
       "technologies": [
-        "React Native",
-        "Node.js",
-        "Framer Motion"
+        "Next.js",
+        "Node.js"
       ],
       "gallery": [
         "/mobile_banking_app_ui.png",
@@ -41,47 +40,54 @@
     },
     {
       "id": "2",
-      "title": "Cart Redesign",
-      "category": "E-commerce",
-      "image": "/ecommerce_cart_ui.png",
-      "link": "#",
-      "description": "Optimizing the checkout flow to reduce cart abandonment by 23%.",
-      "longDescription": "This redesign project aimed to simplify the checkout process for a major e-commerce retailer. By removing distractions and implementing a linear step-process, we successfully increased conversion rates and reduced cart abandonment significantly.",
+      "title": "Valentines Card",
+      "category": "Custom Invitation",
+      "image": "/valentinescard.png",
+      "link": "https://will-you-be-my-valentine-dew-dew.vercel.app/",
+      "description": "A beautifully designed custom Valentines card to express love and make your celebration special.",
+      "longDescription": "Create memorable moments with our Valentines Card, a beautifully designed custom invitation perfect for expressing love and affection. Whether it’s for your partner, friends, or family, this card adds a personal touch to your celebration. With elegant designs, customizable messages, and high-quality visuals, your heartfelt sentiments will stand out and make any Valentine’s Day unforgettable. Ideal for parties, romantic gestures, or special events, this card combines creativity and emotion in one thoughtful package.",
       "technologies": [
+        "Next.js",
         "Figma",
-        "User Testing",
+        "Tailwind CSS",
         "Prototyping"
       ]
     },
     {
       "id": "3",
-      "title": "Analytics Pro",
-      "category": "SaaS Dashboard",
-      "image": "/saas_dashboard_ui.png",
-      "link": "#",
-      "description": "A comprehensive data visualization platform for enterprise metrics.",
-      "longDescription": "Analytics Pro handles millions of data points to provide real-time insights for enterprise clients. The challenge was organizing complex data sets into an intuitive, digestible dashboard without compromising on depth.",
+      "title": "Tapales Veterinary Clinic",
+      "category": "Website",
+      "image": "/tapalesvet.png",
+      "link": "https://tapalesveterinaryclinic.com/",
+      "description": "Trusted veterinary care for your pets, offering wellness, diagnostics, and treatments with compassion and expertise.",
+      "longDescription": "Tapales Veterinary Clinic is your trusted partner in pet care, dedicated to keeping your furry friends healthy and happy. Our clinic offers comprehensive veterinary services including wellness checkups, vaccinations, diagnostics, treatments, and pet health consultations. With a compassionate team of professionals, modern facilities, and a focus on personalized care, we ensure that every pet receives the attention and treatment they deserve. From routine checkups to specialized care, Tapales Veterinary Clinic is committed to supporting the well-being of your pets every step of the way.",
       "technologies": [
         "Next.js",
-        "D3.js",
-        "Tailwind CSS"
+        "React",
+        "Tailwind CSS",
+        "Figma",
+        "Prototyping",
+        "Node.js",
+        "MongoDB",
+        "Prisma",
+        "Render"
       ]
     }
   ],
   "experience": [
     {
       "id": "1",
-      "company": "Lenskart",
-      "role": "Product Designer",
-      "period": "2022 - Present",
-      "description": "Led the redesign of the mobile app."
+      "company": "VIP Scale",
+      "role": "Team Lead",
+      "period": "2025 - 2026",
+      "description": "Team lead for Marketing services within GHL and Kajabi platforms"
     },
     {
       "id": "2",
-      "company": "Oyo",
-      "role": "UI/UX Designer",
-      "period": "2020 - 2022",
-      "description": "Improved booking conversion by 15%."
+      "company": "VIP Scale",
+      "role": "Full Stack Developer, Kajabi & GHL Expert",
+      "period": "2024 - 2025",
+      "description": "Creates and Maintain platforms outside and within the company"
     }
   ],
   "skills": [
