@@ -8,9 +8,10 @@ export function Footer() {
                     © {new Date().getFullYear()} Paul Bernard Bartolo. All rights reserved.
                 </p>
                 <div className="flex gap-6">
-                    <Link href="#" className="text-zinc-500 hover:text-primary transition-colors">Twitter</Link>
-                    <Link href="#" className="text-zinc-500 hover:text-primary transition-colors">GitHub</Link>
-                    <Link href="#" className="text-zinc-500 hover:text-primary transition-colors">LinkedIn</Link>
+                    <Link href="#hero" className="text-zinc-500 hover:text-primary transition-colors text-sm">Home</Link>
+                    <Link href="#about" className="text-zinc-500 hover:text-primary transition-colors text-sm">About</Link>
+                    <Link href="#projects" className="text-zinc-500 hover:text-primary transition-colors text-sm">Projects</Link>
+                    <Link href="#contact" className="text-zinc-500 hover:text-primary transition-colors text-sm">Contact</Link>
                 </div>
             </div>
         </footer>
