@@ -132,19 +132,19 @@
   ],
   "testimonials": [
     {
-      "name": "Sarah Miller",
+      "name": "Sarah",
       "role": "CEO at Technic",
       "content": "Paul transformed our outdated platform into a modern masterpiece. The attention to detail is unmatched.",
       "avatar": "/avatars/sarah.jpg"
     },
     {
-      "name": "James Carter",
+      "name": "James",
       "role": "Founder of AutomateIt",
       "content": "The automation workflows Paul set up saved us 20 hours a week. Truly an expert in GHL.",
       "avatar": "/avatars/james.jpg"
     },
     {
-      "name": "Emily Chen",
+      "name": "Emily",
       "role": "Product Manager",
       "content": "Incredible communication and speed. The best developer we've worked with.",
       "avatar": "/avatars/emily.jpg"
