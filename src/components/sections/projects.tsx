@@ -201,11 +201,10 @@ export function Projects({ data }: { data: any }) {
                                 </div>
 
                                 <div className="space-y-6 text-zinc-400 leading-relaxed md:text-lg">
-                                    <p>{selectedProject.longDescription || selectedProject.description}</p>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    </p>
+                                    <p>{selectedProject.description}</p>
+                                    {selectedProject.longDescription && (
+                                        <p>{selectedProject.longDescription}</p>
+                                    )}
                                 </div>
                             </div>
                         </motion.div>
