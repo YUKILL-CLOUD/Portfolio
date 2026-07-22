@@ -15,7 +15,9 @@ export const heroSchema = z.object({
     years_exp: z.string().optional(),
     projects_completed: z.string().optional(),
     clients_count: z.string().optional(),
+    automation_years: z.string().optional(),
     resume_url: z.string().optional(),
+    automation_samples_url: z.string().optional(),
     status: statusEnum.default('published')
 });
 
@@ -32,6 +34,7 @@ export const serviceSchema = z.object({
 export const projectSchema = z.object({
     id: z.string().optional(),
     title: z.string().min(1, 'Title is required'),
+    slug: z.string().optional(),
     category: z.string().min(1, 'Category is required'),
     image: z.string().optional(),
     gallery: z.array(z.string()).default([]),
@@ -39,6 +42,14 @@ export const projectSchema = z.object({
     github_url: z.string().optional(),
     description: z.string().min(1, 'Short description is required'),
     long_description: z.string().optional(),
+    problem: z.string().optional(),
+    solution: z.string().optional(),
+    key_features: z.array(z.string()).default([]),
+    architecture: z.string().optional(),
+    architecture_image: z.string().optional(),
+    engineering_challenges: z.string().optional(),
+    results: z.string().optional(),
+    lessons_learned: z.string().optional(),
     technologies: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     display_order: z.number().int().default(0),
@@ -50,7 +61,7 @@ export const skillSchema = z.object({
     id: z.string().optional(),
     name: z.string().min(1, 'Skill name is required'),
     level: z.number().min(0).max(100).default(90),
-    category: z.string().default('Development'),
+    category: z.string().default('Full Stack Dev'),
     display_order: z.number().int().default(0),
     is_visible: z.boolean().default(true),
     status: statusEnum.default('published')
@@ -115,6 +126,11 @@ export const settingsSchema = z.object({
     og_image: z.string().optional(),
     favicon: z.string().optional(),
     resume_url: z.string().optional(),
+    automation_samples_url: z.string().optional(),
+    work_with_me_title: z.string().optional(),
+    work_with_me_subtitle: z.string().optional(),
+    work_with_me_cta_label: z.string().optional(),
+    github_username: z.string().optional(),
     analytics_id: z.string().optional(),
     google_analytics_id: z.string().optional(),
     site_name: z.string().optional()

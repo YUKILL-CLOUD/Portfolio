@@ -1,216 +1,234 @@
 "use client"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ArrowUpRight, X, ChevronLeft, ChevronRight } from "lucide-react"
-import Link from "next/link"
-import { Reveal } from "@/components/animations/reveal"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { ArrowUpRight, ExternalLink, Github, Sparkles, X, ChevronRight, BookOpen } from "lucide-react"
+import Link from "next/link"
 
 export function Projects({ data }: { data: any }) {
-    const [visibleProjects, setVisibleProjects] = useState(3);
-
     const [selectedProject, setSelectedProject] = useState<any>(null);
-    const [currentSlide, setCurrentSlide] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-    const openProject = (project: any) => {
-        setSelectedProject(project);
-        setCurrentSlide(0);
-    };
+    if (!data?.projects || data.projects.length === 0) return null;
 
-    const nextSlide = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!selectedProject) return;
-        const images = selectedProject.gallery || [selectedProject.image];
-        setCurrentSlide((prev) => (prev + 1) % images.length);
-    };
+    const rawProjects = data.projects;
+    const categories = ["All", ...Array.from(new Set(rawProjects.map((p: any) => p.category))) as string[]];
 
-    const prevSlide = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!selectedProject) return;
-        const images = selectedProject.gallery || [selectedProject.image];
-        setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
-    };
+    const filteredProjects = selectedCategory === "All"
+        ? rawProjects
+        : rawProjects.filter((p: any) => p.category === selectedCategory);
 
-    if (!data) return null;
+    // Identify Featured Project
+    const featuredProject = filteredProjects.find((p: any) => p.featured) || filteredProjects[0];
+    const remainingProjects = filteredProjects.filter((p: any) => p.id !== featuredProject?.id);
 
     return (
-        <section id="projects" className="py-24 bg-zinc-950">
-            <div className="container mx-auto px-4 md:px-6">
-                <Reveal width="100%">
-                    <div className="flex flex-col items-center text-center mb-12">
-                        <span className="text-primary text-sm font-medium tracking-widest uppercase">Portfolio</span>
-                        <h2 className="text-3xl md:text-5xl font-bold mt-2">Selected Works</h2>
-                    </div>
-                </Reveal>
+        <section id="projects" className="py-24 bg-zinc-950 relative overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-1/3 left-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {data.projects.slice(0, visibleProjects).map((project: any, index: number) => (
-                        <Reveal key={project.id} delay={index * 0.1}>
-                            <div onClick={() => openProject(project)} className="cursor-pointer block h-full">
-                                <Card className="h-full group overflow-hidden border-zinc-800 bg-zinc-900/40 hover:border-primary/50 transition-colors relative">
-                                    <div className="aspect-video w-full bg-zinc-800 relative overflow-hidden">
-                                        {/* Image */}
-                                        <img
-                                            src={project.image}
-                                            alt={project.title}
-                                            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent z-10" />
+            <div className="container mx-auto px-4 md:px-6 relative z-10">
+                <div className="flex flex-col items-center text-center mb-12">
+                    <span className="text-primary text-xs font-semibold tracking-widest uppercase">Portfolio & Case Studies</span>
+                    <h2 className="text-3xl md:text-5xl font-bold tracking-tighter mt-2 mb-4 text-white">Selected Works</h2>
+                    <p className="text-zinc-400 max-w-xl text-sm md:text-base">
+                        Explore full-stack web applications, marketing automations, and engineering case studies.
+                    </p>
 
-                                        <div className="p-6 md:p-8 absolute bottom-0 left-0 z-20 w-full flex flex-col justify-end">
-                                            <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                                                <div className="mb-2">
-                                                    <span className="text-primary text-[10px] md:text-xs font-bold uppercase tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] block">
-                                                        {project.category}
-                                                    </span>
-                                                </div>
-                                                <div className="flex justify-between items-end gap-4">
-                                                    <div className="w-full">
-                                                        <h3 className="text-xl md:text-2xl font-bold text-white leading-tight">{project.title}</h3>
-                                                        <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out">
-                                                            <div className="overflow-hidden">
-                                                                <p className="text-zinc-400 text-sm line-clamp-2 pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                                                                    {project.description || "A showcase of high-performance digital product design."}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <Button size="icon" variant="neon" className="rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 shrink-0 mb-1 pointer-events-none group-hover:pointer-events-auto">
-                                                        <ArrowUpRight className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Card>
-                            </div>
-                        </Reveal>
-                    ))}
+                    {/* Category Filter Pills */}
+                    {categories.length > 2 && (
+                        <div className="flex flex-wrap justify-center gap-2 mt-6">
+                            {categories.map((cat: string) => (
+                                <button
+                                    key={cat}
+                                    onClick={() => setSelectedCategory(cat)}
+                                    className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${selectedCategory === cat ? "bg-primary text-black shadow-lg shadow-primary/20" : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white"}`}
+                                >
+                                    {cat}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
-                {data.projects.length > 3 && (
-                    <div className="flex justify-center mt-12">
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            className="border-zinc-800 text-zinc-400 hover:text-white hover:border-primary/50"
-                            onClick={() => setVisibleProjects(prev => prev === 3 ? data.projects.length : 3)}
-                        >
-                            {visibleProjects === 3 ? "Show More Work" : "Show Less"}
-                        </Button>
-                    </div>
-                )}
-            </div>
-
-            {/* Project Details Modal */}
-            <AnimatePresence>
-                {selectedProject && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setSelectedProject(null)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-                        />
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-4xl bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-                        >
-                            <div className="relative h-64 md:h-96 w-full group">
-                                <AnimatePresence mode="wait">
-                                    <motion.img
-                                        key={currentSlide}
-                                        src={(selectedProject.gallery || [selectedProject.image])[currentSlide]}
-                                        alt={selectedProject.title}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </AnimatePresence>
-
-                                <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-60" />
-
-                                <Button
-                                    size="icon"
-                                    variant="secondary"
-                                    className="absolute top-4 right-4 rounded-full bg-black/50 hover:bg-black/70 text-white border-0 z-20"
-                                    onClick={() => setSelectedProject(null)}
-                                >
-                                    <X className="h-5 w-5" />
-                                </Button>
-
-                                {/* Slideshow Navigation */}
-                                {(selectedProject.gallery?.length > 1) && (
-                                    <>
-                                        <Button
-                                            size="icon"
-                                            variant="ghost"
-                                            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/30 hover:bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                                            onClick={prevSlide}
-                                        >
-                                            <ChevronLeft className="h-6 w-6" />
-                                        </Button>
-                                        <Button
-                                            size="icon"
-                                            variant="ghost"
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/30 hover:bg-black/50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                                            onClick={nextSlide}
-                                        >
-                                            <ChevronRight className="h-6 w-6" />
-                                        </Button>
-                                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                                            {selectedProject.gallery.map((_: any, idx: number) => (
-                                                <div
-                                                    key={idx}
-                                                    className={`h-1.5 rounded-full transition-all ${idx === currentSlide ? 'w-6 bg-white' : 'w-1.5 bg-white/50'}`}
-                                                />
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
+                {/* 1. Featured Project Hero Banner */}
+                {featuredProject && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="mb-12 group rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-primary/50 overflow-hidden shadow-2xl backdrop-blur-md transition-all duration-500"
+                    >
+                        <div className="grid md:grid-cols-12 gap-0 items-center">
+                            {/* Image side */}
+                            <div
+                                className="md:col-span-7 h-64 md:h-96 relative overflow-hidden bg-zinc-950 cursor-pointer"
+                                onClick={() => setSelectedProject(featuredProject)}
+                            >
+                                <img
+                                    src={featuredProject.image || '/zbudget.png'}
+                                    alt={featuredProject.title}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                />
+                                <div className="absolute top-4 left-4 z-10">
+                                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-primary text-black flex items-center gap-1 shadow-lg">
+                                        <Sparkles className="h-3 w-3" /> Featured Project
+                                    </span>
+                                </div>
                             </div>
 
-                            <div className="p-8 md:p-12">
-                                <div className="flex flex-wrap gap-4 items-start justify-between mb-8">
-                                    <div>
-                                        <div className="mb-3">
-                                            <span className="text-primary text-[10px] md:text-xs font-bold uppercase tracking-widest drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] block">
-                                                {selectedProject.category}
-                                            </span>
-                                        </div>
-                                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">{selectedProject.title}</h2>
-                                        <div className="flex flex-wrap gap-2">
-                                            {selectedProject.technologies?.map((tech: string) => (
-                                                <span key={tech} className="px-3 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-medium border border-zinc-700">
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <Button size="lg" variant="neon" asChild>
-                                        <Link href={selectedProject.link || "#"} target="_blank" rel="noopener noreferrer">
-                                            View Project <ArrowUpRight className="ml-2 h-4 w-4" />
-                                        </Link>
-                                    </Button>
+                            {/* Info side */}
+                            <div className="md:col-span-5 p-6 md:p-10 flex flex-col justify-between h-full space-y-6">
+                                <div className="space-y-3">
+                                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">
+                                        {featuredProject.category}
+                                    </span>
+                                    <h3
+                                        className="text-2xl md:text-4xl font-bold text-white group-hover:text-primary transition-colors cursor-pointer"
+                                        onClick={() => setSelectedProject(featuredProject)}
+                                    >
+                                        {featuredProject.title}
+                                    </h3>
+                                    <p className="text-zinc-400 text-sm md:text-base leading-relaxed line-clamp-3">
+                                        {featuredProject.description}
+                                    </p>
                                 </div>
 
-                                <div className="space-y-6 text-zinc-400 leading-relaxed md:text-lg">
-                                    <p>{selectedProject.description}</p>
-                                    {selectedProject.longDescription && (
-                                        selectedProject.longDescription.includes('<') ? (
-                                            <div
-                                                className="text-zinc-300 space-y-4 [&>p]:leading-relaxed [&>strong]:text-white [&>strong]:font-semibold [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:text-white [&>h2]:text-xl [&>h2]:font-semibold [&>h2]:text-white [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5"
-                                                dangerouslySetInnerHTML={{ __html: selectedProject.longDescription }}
-                                            />
-                                        ) : (
-                                            <p>{selectedProject.longDescription}</p>
-                                        )
+                                <div className="space-y-4">
+                                    <div className="flex flex-wrap gap-2">
+                                        {featuredProject.technologies?.slice(0, 4).map((tech: string) => (
+                                            <span key={tech} className="px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-medium border border-zinc-700">
+                                                {tech}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex items-center gap-3 pt-2">
+                                        <Button variant="neon" size="sm" asChild>
+                                            <Link href={`/projects/${featuredProject.slug || featuredProject.id}`}>
+                                                <BookOpen className="h-4 w-4 mr-1.5" /> Read Case Study
+                                            </Link>
+                                        </Button>
+                                        {featuredProject.link && (
+                                            <Button variant="outline" size="sm" className="rounded-lg border-zinc-800 text-zinc-300 hover:text-white" asChild>
+                                                <a href={featuredProject.link} target="_blank" rel="noopener noreferrer">
+                                                    Live Demo <ArrowUpRight className="ml-1 h-3.5 w-3.5 text-primary" />
+                                                </a>
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* 2. Remaining Projects Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {remainingProjects.map((project: any, index: number) => (
+                        <motion.div
+                            key={project.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            onClick={() => setSelectedProject(project)}
+                            className="group cursor-pointer rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-primary/50 overflow-hidden backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1"
+                        >
+                            <div>
+                                <div className="h-48 relative overflow-hidden bg-zinc-950">
+                                    <img
+                                        src={project.image || '/zbudget.png'}
+                                        alt={project.title}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                    <div className="absolute top-3 left-3">
+                                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-zinc-900/90 text-zinc-300 border border-zinc-800 backdrop-blur-md">
+                                            {project.category}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="p-5 space-y-2">
+                                    <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors flex items-center justify-between">
+                                        {project.title}
+                                        <ArrowUpRight className="h-4 w-4 text-zinc-500 group-hover:text-primary transition-colors" />
+                                    </h3>
+                                    <p className="text-zinc-400 text-xs line-clamp-2 leading-relaxed">
+                                        {project.description}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="px-5 pb-5 pt-2 flex flex-wrap gap-1.5 border-t border-zinc-800/40 mt-3">
+                                {project.technologies?.slice(0, 3).map((tech: string) => (
+                                    <span key={tech} className="px-2 py-0.5 rounded bg-zinc-800/60 text-zinc-400 text-[10px] font-mono">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Quick Preview Modal (20-30 Second Summary + Link to Case Study) */}
+            <AnimatePresence>
+                {selectedProject && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-zinc-900 border border-zinc-800 rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl p-6 md:p-8 space-y-6 relative"
+                        >
+                            <button
+                                onClick={() => setSelectedProject(null)}
+                                className="absolute top-4 right-4 p-2 rounded-full bg-zinc-800/80 text-zinc-400 hover:text-white transition-colors"
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
+
+                            <div className="h-44 rounded-2xl overflow-hidden bg-zinc-950">
+                                <img src={selectedProject.image || '/zbudget.png'} alt="" className="w-full h-full object-cover" />
+                            </div>
+
+                            <div className="space-y-3">
+                                <span className="text-xs font-bold uppercase tracking-wider text-primary">{selectedProject.category}</span>
+                                <h3 className="text-2xl font-bold text-white">{selectedProject.title}</h3>
+                                <p className="text-zinc-300 text-sm leading-relaxed">{selectedProject.description}</p>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2">
+                                {selectedProject.technologies?.map((tech: string) => (
+                                    <span key={tech} className="px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-mono">
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-zinc-800">
+                                <Button variant="neon" className="w-full sm:w-auto font-semibold" asChild>
+                                    <Link href={`/projects/${selectedProject.slug || selectedProject.id}`}>
+                                        Read Full Case Study <ChevronRight className="ml-1 h-4 w-4" />
+                                    </Link>
+                                </Button>
+
+                                <div className="flex items-center gap-2 w-full sm:w-auto">
+                                    {selectedProject.link && (
+                                        <Button variant="outline" size="sm" className="w-full sm:w-auto rounded-lg border-zinc-800 text-zinc-300 hover:text-white" asChild>
+                                            <a href={selectedProject.link} target="_blank" rel="noopener noreferrer">
+                                                Live Demo <ExternalLink className="ml-1 h-3.5 w-3.5 text-primary" />
+                                            </a>
+                                        </Button>
+                                    )}
+                                    {selectedProject.github_url && (
+                                        <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white" asChild>
+                                            <a href={selectedProject.github_url} target="_blank" rel="noopener noreferrer">
+                                                <Github className="h-4 w-4" />
+                                            </a>
+                                        </Button>
                                     )}
                                 </div>
                             </div>
@@ -219,5 +237,5 @@ export function Projects({ data }: { data: any }) {
                 )}
             </AnimatePresence>
         </section>
-    )
+    );
 }

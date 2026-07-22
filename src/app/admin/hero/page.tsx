@@ -20,7 +20,9 @@ export default function HeroEditorPage() {
         years_exp: '7+',
         projects_completed: '50+',
         clients_count: '30+',
+        automation_years: '4+',
         resume_url: '',
+        automation_samples_url: '',
         status: 'published'
     });
 
@@ -36,7 +38,9 @@ export default function HeroEditorPage() {
                     years_exp: data.years_exp || '7+',
                     projects_completed: data.projects_completed || '50+',
                     clients_count: data.clients_count || '30+',
+                    automation_years: data.automation_years || '4+',
                     resume_url: data.resume_url || '',
+                    automation_samples_url: data.automation_samples_url || '',
                     status: data.status || 'published'
                 });
             }
@@ -118,9 +122,9 @@ export default function HeroEditorPage() {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="space-y-1">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Years Experience</label>
+                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Years Exp</label>
                         <input
                             type="text"
                             value={formData.years_exp}
@@ -129,7 +133,7 @@ export default function HeroEditorPage() {
                         />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Projects Completed</label>
+                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Projects</label>
                         <input
                             type="text"
                             value={formData.projects_completed}
@@ -138,11 +142,43 @@ export default function HeroEditorPage() {
                         />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Clients Count</label>
+                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Clients</label>
                         <input
                             type="text"
                             value={formData.clients_count}
                             onChange={(e) => setFormData({ ...formData, clients_count: e.target.value })}
+                            className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Automation Exp</label>
+                        <input
+                            type="text"
+                            value={formData.automation_years}
+                            onChange={(e) => setFormData({ ...formData, automation_years: e.target.value })}
+                            className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Resume PDF Link</label>
+                        <input
+                            type="url"
+                            value={formData.resume_url}
+                            onChange={(e) => setFormData({ ...formData, resume_url: e.target.value })}
+                            placeholder="https://example.com/resume.pdf"
+                            className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Automation Samples Link</label>
+                        <input
+                            type="url"
+                            value={formData.automation_samples_url}
+                            onChange={(e) => setFormData({ ...formData, automation_samples_url: e.target.value })}
+                            placeholder="https://example.com/samples.pdf"
                             className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                         />
                     </div>

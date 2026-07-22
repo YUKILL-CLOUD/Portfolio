@@ -3,6 +3,7 @@
 import {
     getHero as getHeroContent,
     getProjects as getProjectsContent,
+    getProjectBySlug as getProjectBySlugContent,
     getServices as getServicesContent,
     getSkills as getSkillsContent,
     getExperience as getExperienceContent,
@@ -19,6 +20,10 @@ export async function getHeroAction() {
 
 export async function getProjectsAction() {
     return await getProjectsContent();
+}
+
+export async function getProjectBySlugAction(slug: string) {
+    return await getProjectBySlugContent(slug);
 }
 
 export async function getServicesAction() {

@@ -30,7 +30,8 @@ export async function getHero() {
         avatar: local.profile?.avatar || '/pp.png',
         years_exp: local.stats?.[0]?.value || '7+',
         projects_completed: local.stats?.[1]?.value || '50+',
-        clients_count: local.stats?.[2]?.value || '30+'
+        clients_count: local.stats?.[2]?.value || '30+',
+        automation_years: '4+'
     };
 }
 
@@ -48,6 +49,7 @@ export async function getProjects() {
                 return data.map(p => ({
                     id: p.id,
                     title: p.title,
+                    slug: p.slug || p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
                     category: p.category,
                     image: p.image,
                     gallery: p.gallery || [],
@@ -55,6 +57,14 @@ export async function getProjects() {
                     github_url: p.github_url,
                     description: p.description,
                     longDescription: p.long_description,
+                    problem: p.problem,
+                    solution: p.solution,
+                    key_features: p.key_features || [],
+                    architecture: p.architecture,
+                    architecture_image: p.architecture_image,
+                    engineering_challenges: p.engineering_challenges,
+                    results: p.results,
+                    lessons_learned: p.lessons_learned,
                     technologies: p.technologies || [],
                     featured: p.featured,
                     display_order: p.display_order
@@ -63,7 +73,15 @@ export async function getProjects() {
         }
     }
     const local = await getLocalFallbackData();
-    return local.projects || [];
+    return (local.projects || []).map((p: any) => ({
+        ...p,
+        slug: p.slug || p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
+    }));
+}
+
+export async function getProjectBySlug(slug: string) {
+    const projects = await getProjects();
+    return projects.find((p: any) => p.slug === slug || p.id === slug) || null;
 }
 
 export async function getServices() {
@@ -198,7 +216,11 @@ export async function getSettings() {
     }
     return {
         seo_title: 'Paul Bernard Bartolo | Full Stack Developer & Kajabi/GHL Expert',
-        seo_description: 'Full Stack Developer, Kajabi & GHL Expert crafting scalable web applications and marketing automations.'
+        seo_description: 'Full Stack Developer, Kajabi & GHL Expert crafting scalable web applications and marketing automations.',
+        work_with_me_title: 'Let\'s build systems that save time, increase revenue, and scale your business.',
+        work_with_me_subtitle: 'Available for full-stack web applications, Kajabi & GoHighLevel sales funnels, and CRM automation architecture.',
+        work_with_me_cta_label: 'Start a Project',
+        github_username: 'YUKILL-CLOUD'
     };
 }
 
@@ -229,7 +251,8 @@ export async function getContent() {
         stats: [
             { label: 'Years Experience', value: hero.years_exp || '7+' },
             { label: 'Projects Completed', value: hero.projects_completed || '50+' },
-            { label: 'Clients', value: hero.clients_count || '30+' }
+            { label: 'Clients Worked With', value: hero.clients_count || '30+' },
+            { label: 'Years in Automation', value: hero.automation_years || '4+' }
         ],
         projects,
         services,

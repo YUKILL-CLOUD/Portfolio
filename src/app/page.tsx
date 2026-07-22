@@ -9,8 +9,10 @@ import { Experience } from "@/components/sections/experience"
 import { Testimonials } from "@/components/sections/testimonials"
 import { Contact } from "@/components/sections/contact"
 import { AppsUsed } from "@/components/sections/apps-used"
+import { WorkWithMe } from "@/components/sections/work-with-me"
+import { GithubActivity } from "@/components/sections/github-activity"
 
-export const revalidate = 0; // Disable cache for demo purposes to see updates immediately
+export const revalidate = 0; // Disable cache to reflect CMS updates live
 
 export default async function Home() {
   const data = await getContent();
@@ -22,9 +24,11 @@ export default async function Home() {
       <AppsUsed />
       <Services data={data} />
       <Projects data={data} />
-      <Skills />
+      <Skills data={data} />
       <Experience data={data} />
+      <GithubActivity username={data.settings?.github_username || 'YUKILL-CLOUD'} />
       <Testimonials data={data} />
+      <WorkWithMe settings={data.settings} />
       <Contact />
       <Footer />
     </main>

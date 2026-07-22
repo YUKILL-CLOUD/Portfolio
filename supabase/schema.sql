@@ -1,4 +1,4 @@
--- Swift Sunspot CMS Database Schema (Supabase)
+-- Swift Sunspot CMS Database Schema (Supabase) - Phase 3 Extended
 
 -- Create custom enum types
 DO $$ BEGIN
@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS public.hero (
     years_exp TEXT DEFAULT '7+',
     projects_completed TEXT DEFAULT '50+',
     clients_count TEXT DEFAULT '30+',
+    automation_years TEXT DEFAULT '4+',
     resume_url TEXT,
+    automation_samples_url TEXT,
     status content_status DEFAULT 'published',
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
@@ -59,10 +61,11 @@ CREATE TABLE IF NOT EXISTS public.services (
     updated_by UUID
 );
 
--- 4. PROJECTS TABLE
+-- 4. PROJECTS TABLE (Phase 3 Extended Case Study Fields)
 CREATE TABLE IF NOT EXISTS public.projects (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
+    slug TEXT UNIQUE,
     category TEXT NOT NULL,
     image TEXT,
     gallery TEXT[] DEFAULT '{}',
@@ -70,6 +73,14 @@ CREATE TABLE IF NOT EXISTS public.projects (
     github_url TEXT,
     description TEXT NOT NULL,
     long_description TEXT,
+    problem TEXT,
+    solution TEXT,
+    key_features TEXT[] DEFAULT '{}',
+    architecture TEXT,
+    architecture_image TEXT,
+    engineering_challenges TEXT,
+    results TEXT,
+    lessons_learned TEXT,
     technologies TEXT[] DEFAULT '{}',
     featured BOOLEAN DEFAULT FALSE,
     display_order INT DEFAULT 0,
@@ -86,7 +97,7 @@ CREATE TABLE IF NOT EXISTS public.skills (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     level INT NOT NULL DEFAULT 90,
-    category TEXT DEFAULT 'General',
+    category TEXT DEFAULT 'Full Stack Dev',
     display_order INT DEFAULT 0,
     is_visible BOOLEAN DEFAULT TRUE,
     status content_status DEFAULT 'published',
@@ -175,7 +186,7 @@ CREATE TABLE IF NOT EXISTS public.contact (
     updated_by UUID
 );
 
--- 11. SETTINGS TABLE
+-- 11. SETTINGS TABLE (Phase 3 Extended Settings)
 CREATE TABLE IF NOT EXISTS public.settings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     seo_title TEXT DEFAULT 'Paul Bernard Bartolo | Full Stack Developer & Kajabi/GHL Expert',
@@ -183,6 +194,11 @@ CREATE TABLE IF NOT EXISTS public.settings (
     og_image TEXT,
     favicon TEXT,
     resume_url TEXT,
+    automation_samples_url TEXT,
+    work_with_me_title TEXT DEFAULT 'Let''s build systems that save time, increase revenue, and scale your business.',
+    work_with_me_subtitle TEXT DEFAULT 'Available for full-stack web applications, Kajabi & GoHighLevel sales funnels, and CRM automation architecture.',
+    work_with_me_cta_label TEXT DEFAULT 'Start a Project',
+    github_username TEXT DEFAULT 'YUKILL-CLOUD',
     analytics_id TEXT,
     google_analytics_id TEXT,
     site_name TEXT DEFAULT 'Paul Bernard Bartolo Portfolio',
@@ -230,17 +246,3 @@ CREATE POLICY "Allow authenticated full access to apps" ON public.apps FOR ALL U
 CREATE POLICY "Allow authenticated full access to social_links" ON public.social_links FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Allow authenticated full access to contact" ON public.contact FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Allow authenticated full access to settings" ON public.settings FOR ALL USING (auth.role() = 'authenticated');
-
--- STORAGE BUCKET FOR ASSETS
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('portfolio-assets', 'portfolio-assets', true)
-ON CONFLICT (id) DO NOTHING;
-
-CREATE POLICY "Allow public read access on portfolio-assets"
-ON storage.objects FOR SELECT USING (bucket_id = 'portfolio-assets');
-
-CREATE POLICY "Allow authenticated upload on portfolio-assets"
-ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'portfolio-assets' AND auth.role() = 'authenticated');
-
-CREATE POLICY "Allow authenticated delete on portfolio-assets"
-ON storage.objects FOR DELETE USING (bucket_id = 'portfolio-assets' AND auth.role() = 'authenticated');
