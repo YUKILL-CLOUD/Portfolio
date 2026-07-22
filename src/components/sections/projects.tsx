@@ -203,7 +203,14 @@ export function Projects({ data }: { data: any }) {
                                 <div className="space-y-6 text-zinc-400 leading-relaxed md:text-lg">
                                     <p>{selectedProject.description}</p>
                                     {selectedProject.longDescription && (
-                                        <p>{selectedProject.longDescription}</p>
+                                        selectedProject.longDescription.includes('<') ? (
+                                            <div
+                                                className="text-zinc-300 space-y-4 [&>p]:leading-relaxed [&>strong]:text-white [&>strong]:font-semibold [&>h1]:text-2xl [&>h1]:font-bold [&>h1]:text-white [&>h2]:text-xl [&>h2]:font-semibold [&>h2]:text-white [&>ul]:list-disc [&>ul]:pl-5 [&>ol]:list-decimal [&>ol]:pl-5"
+                                                dangerouslySetInnerHTML={{ __html: selectedProject.longDescription }}
+                                            />
+                                        ) : (
+                                            <p>{selectedProject.longDescription}</p>
+                                        )
                                     )}
                                 </div>
                             </div>
