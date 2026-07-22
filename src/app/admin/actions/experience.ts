@@ -12,10 +12,14 @@ export async function saveExperienceAction(formData: Record<string, any>) {
 
     const supabase = getSupabaseAdminClient();
     if (supabase) {
-        const { error } = await supabase.from('experience').upsert({
+        const payload: any = {
             ...validated.data,
             updated_at: new Date().toISOString()
-        });
+        };
+        if (!payload.id || payload.id.trim() === '') {
+            delete payload.id;
+        }
+        const { error } = await supabase.from('experience').upsert(payload);
         if (error) return { success: false, message: error.message };
     }
 

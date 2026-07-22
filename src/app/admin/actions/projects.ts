@@ -14,10 +14,13 @@ export async function saveProjectAction(formData: Record<string, any>) {
 
     const supabase = getSupabaseAdminClient();
     if (supabase) {
-        const payload = {
+        const payload: any = {
             ...validated.data,
             updated_at: new Date().toISOString()
         };
+        if (!payload.id || payload.id.trim() === '') {
+            delete payload.id;
+        }
         const { error } = await supabase.from('projects').upsert(payload);
         if (error) {
             return { success: false, message: error.message };
