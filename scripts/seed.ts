@@ -1,6 +1,9 @@
+import { loadEnvConfig } from '@next/env';
 import { createClient } from '@supabase/supabase-js';
 import * as fs from 'fs';
 import * as path from 'path';
+
+loadEnvConfig(process.cwd());
 
 async function seed() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
