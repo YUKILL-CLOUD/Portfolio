@@ -12,10 +12,18 @@ export async function updateSettingsAction(formData: Record<string, any>) {
 
     const supabase = getSupabaseAdminClient();
     if (supabase) {
-        const { error } = await supabase.from('settings').upsert({
+        const { data: existingSettings } = await supabase.from('settings').select('id').limit(1).single();
+
+        const payload: any = {
             ...validated.data,
             updated_at: new Date().toISOString()
-        });
+        };
+
+        if (existingSettings?.id) {
+            payload.id = existingSettings.id;
+        }
+
+        const { error } = await supabase.from('settings').upsert(payload);
         if (error) return { success: false, message: error.message };
     }
 
