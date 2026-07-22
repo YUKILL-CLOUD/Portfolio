@@ -2,29 +2,49 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowUpRight, ExternalLink, Github, Sparkles, X, ChevronRight, BookOpen } from "lucide-react"
+import { ArrowUpRight, ExternalLink, Github, Sparkles, X, ChevronRight, BookOpen, CheckCircle2, ChevronDown } from "lucide-react"
 import Link from "next/link"
+
+const BATCH_SIZE = 6;
 
 export function Projects({ data }: { data: any }) {
     const [selectedProject, setSelectedProject] = useState<any>(null);
     const [selectedCategory, setSelectedCategory] = useState<string>("All");
+    const [visibleCount, setVisibleCount] = useState<number>(BATCH_SIZE);
 
     if (!data?.projects || data.projects.length === 0) return null;
 
     const rawProjects = data.projects;
+    // Auto-generate categories from projects
     const categories = ["All", ...Array.from(new Set(rawProjects.map((p: any) => p.category))) as string[]];
 
+    // Filter projects by selected category
     const filteredProjects = selectedCategory === "All"
         ? rawProjects
         : rawProjects.filter((p: any) => p.category === selectedCategory);
 
-    // Identify Featured Project
+    // Single Featured Project always at top
     const featuredProject = filteredProjects.find((p: any) => p.featured) || filteredProjects[0];
+    
+    // Remaining grid items (excluding featured project)
     const remainingProjects = filteredProjects.filter((p: any) => p.id !== featuredProject?.id);
+
+    // Paginated subset of grid projects
+    const paginatedGridProjects = remainingProjects.slice(0, visibleCount);
+    const hasMore = visibleCount < remainingProjects.length;
+
+    const handleCategoryChange = (category: string) => {
+        setSelectedCategory(category);
+        setVisibleCount(BATCH_SIZE); // Reset pagination on category change
+    };
+
+    const handleShowMore = () => {
+        setVisibleCount((prev) => prev + BATCH_SIZE);
+    };
 
     return (
         <section id="projects" className="py-24 bg-zinc-950 relative overflow-hidden">
-            {/* Background elements */}
+            {/* Background glow accent */}
             <div className="absolute top-1/3 left-0 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
 
             <div className="container mx-auto px-4 md:px-6 relative z-10">
@@ -35,13 +55,13 @@ export function Projects({ data }: { data: any }) {
                         Explore full-stack web applications, marketing automations, and engineering case studies.
                     </p>
 
-                    {/* Category Filter Pills */}
+                    {/* Auto-generated Category Filter Pills */}
                     {categories.length > 2 && (
                         <div className="flex flex-wrap justify-center gap-2 mt-6">
                             {categories.map((cat: string) => (
                                 <button
                                     key={cat}
-                                    onClick={() => setSelectedCategory(cat)}
+                                    onClick={() => handleCategoryChange(cat)}
                                     className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${selectedCategory === cat ? "bg-primary text-black shadow-lg shadow-primary/20" : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white"}`}
                                 >
                                     {cat}
@@ -51,7 +71,7 @@ export function Projects({ data }: { data: any }) {
                     )}
                 </div>
 
-                {/* 1. Featured Project Hero Banner */}
+                {/* 1. Featured Project Hero Banner (Always Top) */}
                 {featuredProject && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -63,7 +83,7 @@ export function Projects({ data }: { data: any }) {
                         <div className="grid md:grid-cols-12 gap-0 items-center">
                             {/* Image side */}
                             <div
-                                className="md:col-span-7 h-64 md:h-96 relative overflow-hidden bg-zinc-950 cursor-pointer"
+                                className="md:col-span-7 h-64 md:h-[420px] relative overflow-hidden bg-zinc-950 cursor-pointer"
                                 onClick={() => setSelectedProject(featuredProject)}
                             >
                                 <img
@@ -73,7 +93,7 @@ export function Projects({ data }: { data: any }) {
                                 />
                                 <div className="absolute top-4 left-4 z-10">
                                     <span className="px-3 py-1 rounded-full text-xs font-bold bg-primary text-black flex items-center gap-1 shadow-lg">
-                                        <Sparkles className="h-3 w-3" /> Featured Project
+                                        <Sparkles className="h-3.5 w-3.5" /> Featured Project
                                     </span>
                                 </div>
                             </div>
@@ -93,12 +113,24 @@ export function Projects({ data }: { data: any }) {
                                     <p className="text-zinc-400 text-sm md:text-base leading-relaxed line-clamp-3">
                                         {featuredProject.description}
                                     </p>
+
+                                    {/* Key Highlights Bullet List */}
+                                    {featuredProject.key_highlights && featuredProject.key_highlights.length > 0 && (
+                                        <div className="space-y-1.5 pt-2">
+                                            {featuredProject.key_highlights.slice(0, 3).map((highlight: string, idx: number) => (
+                                                <div key={idx} className="flex items-center gap-2 text-xs text-zinc-300">
+                                                    <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />
+                                                    <span>{highlight}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap gap-1.5">
                                         {featuredProject.technologies?.slice(0, 4).map((tech: string) => (
-                                            <span key={tech} className="px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-medium border border-zinc-700">
+                                            <span key={tech} className="px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-mono border border-zinc-700">
                                                 {tech}
                                             </span>
                                         ))}
@@ -124,46 +156,45 @@ export function Projects({ data }: { data: any }) {
                     </motion.div>
                 )}
 
-                {/* 2. Remaining Projects Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {remainingProjects.map((project: any, index: number) => (
+                {/* 2. Remaining Projects Paginated Grid (Mobile: 2-col compact grid, Tablet: 2-col, Desktop: 3-col) */}
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                    {paginatedGridProjects.map((project: any, index: number) => (
                         <motion.div
                             key={project.id}
                             initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: (index % BATCH_SIZE) * 0.08 }}
                             onClick={() => setSelectedProject(project)}
                             className="group cursor-pointer rounded-2xl bg-zinc-900/40 border border-zinc-800/80 hover:border-primary/50 overflow-hidden backdrop-blur-md flex flex-col justify-between transition-all duration-300 hover:-translate-y-1"
                         >
                             <div>
-                                <div className="h-48 relative overflow-hidden bg-zinc-950">
+                                <div className="h-36 md:h-48 relative overflow-hidden bg-zinc-950">
                                     <img
                                         src={project.image || '/zbudget.png'}
                                         alt={project.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />
-                                    <div className="absolute top-3 left-3">
-                                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-zinc-900/90 text-zinc-300 border border-zinc-800 backdrop-blur-md">
+                                    <div className="absolute top-2 left-2 md:top-3 md:left-3">
+                                        <span className="px-2 py-0.5 rounded-full text-[9px] md:text-[10px] font-bold bg-zinc-900/90 text-zinc-300 border border-zinc-800 backdrop-blur-md">
                                             {project.category}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="p-5 space-y-2">
-                                    <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors flex items-center justify-between">
-                                        {project.title}
-                                        <ArrowUpRight className="h-4 w-4 text-zinc-500 group-hover:text-primary transition-colors" />
+                                <div className="p-3 md:p-5 space-y-1.5 md:space-y-2">
+                                    <h3 className="text-sm md:text-xl font-bold text-white group-hover:text-primary transition-colors flex items-center justify-between">
+                                        <span className="truncate">{project.title}</span>
+                                        <ArrowUpRight className="h-3.5 w-3.5 md:h-4 md:w-4 text-zinc-500 group-hover:text-primary transition-colors shrink-0 ml-1" />
                                     </h3>
-                                    <p className="text-zinc-400 text-xs line-clamp-2 leading-relaxed">
+                                    <p className="text-zinc-400 text-[11px] md:text-xs line-clamp-2 leading-relaxed">
                                         {project.description}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="px-5 pb-5 pt-2 flex flex-wrap gap-1.5 border-t border-zinc-800/40 mt-3">
+                            <div className="px-3 pb-3 md:px-5 md:pb-5 pt-2 flex flex-wrap gap-1 border-t border-zinc-800/40 mt-2">
                                 {project.technologies?.slice(0, 3).map((tech: string) => (
-                                    <span key={tech} className="px-2 py-0.5 rounded bg-zinc-800/60 text-zinc-400 text-[10px] font-mono">
+                                    <span key={tech} className="px-1.5 py-0.5 rounded bg-zinc-800/60 text-zinc-400 text-[9px] md:text-[10px] font-mono">
                                         {tech}
                                     </span>
                                 ))}
@@ -171,9 +202,24 @@ export function Projects({ data }: { data: any }) {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* 3. Progressive Loading ("Show More Projects" Button) */}
+                {hasMore && (
+                    <div className="flex justify-center mt-12">
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={handleShowMore}
+                            className="rounded-full border-zinc-800 bg-zinc-900/80 text-zinc-300 hover:text-white hover:border-primary/50 px-8 gap-2 shadow-lg backdrop-blur-md"
+                        >
+                            Show More Projects ({remainingProjects.length - visibleCount} remaining)
+                            <ChevronDown className="h-4 w-4 text-primary" />
+                        </Button>
+                    </div>
+                )}
             </div>
 
-            {/* Quick Preview Modal (20-30 Second Summary + Link to Case Study) */}
+            {/* Quick Preview Modal (20-30 Second Summary with Key Highlights) */}
             <AnimatePresence>
                 {selectedProject && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
@@ -198,9 +244,24 @@ export function Projects({ data }: { data: any }) {
                                 <span className="text-xs font-bold uppercase tracking-wider text-primary">{selectedProject.category}</span>
                                 <h3 className="text-2xl font-bold text-white">{selectedProject.title}</h3>
                                 <p className="text-zinc-300 text-sm leading-relaxed">{selectedProject.description}</p>
+
+                                {/* Key Highlights in Modal */}
+                                {selectedProject.key_highlights && selectedProject.key_highlights.length > 0 && (
+                                    <div className="p-3.5 rounded-xl bg-zinc-950 border border-zinc-800/80 space-y-2">
+                                        <span className="text-[11px] font-bold uppercase tracking-wider text-primary">Key Highlights</span>
+                                        <div className="space-y-1">
+                                            {selectedProject.key_highlights.map((highlight: string, idx: number) => (
+                                                <div key={idx} className="flex items-center gap-2 text-xs text-zinc-300">
+                                                    <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />
+                                                    <span>{highlight}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-1.5">
                                 {selectedProject.technologies?.map((tech: string) => (
                                     <span key={tech} className="px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 text-xs font-mono">
                                         {tech}

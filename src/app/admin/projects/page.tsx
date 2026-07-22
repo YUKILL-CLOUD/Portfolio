@@ -28,6 +28,7 @@ export default function ProjectsEditorPage() {
         problem: '',
         solution: '',
         key_features: '' as any,
+        key_highlights: '' as any,
         architecture: '',
         architecture_image: '',
         engineering_challenges: '',
@@ -64,6 +65,7 @@ export default function ProjectsEditorPage() {
                 problem: project.problem || '',
                 solution: project.solution || '',
                 key_features: Array.isArray(project.key_features) ? project.key_features.join(', ') : '',
+                key_highlights: Array.isArray(project.key_highlights) ? project.key_highlights.join(', ') : '',
                 architecture: project.architecture || '',
                 architecture_image: project.architecture_image || '',
                 engineering_challenges: project.engineering_challenges || '',
@@ -88,6 +90,7 @@ export default function ProjectsEditorPage() {
                 problem: '',
                 solution: '',
                 key_features: '',
+                key_highlights: '',
                 architecture: '',
                 architecture_image: '',
                 engineering_challenges: '',
@@ -114,13 +117,18 @@ export default function ProjectsEditorPage() {
             ? form.key_features.split(',').map((f: string) => f.trim()).filter(Boolean)
             : form.key_features;
 
+        const keyHighlightsArray = typeof form.key_highlights === 'string'
+            ? form.key_highlights.split(',').map((h: string) => h.trim()).filter(Boolean)
+            : form.key_highlights;
+
         const autoSlug = form.slug || form.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
         const payload = {
             ...form,
             slug: autoSlug,
             technologies: techArray,
-            key_features: keyFeaturesArray
+            key_features: keyFeaturesArray,
+            key_highlights: keyHighlightsArray
         };
 
         const res = await saveProjectAction(payload);
@@ -162,7 +170,7 @@ export default function ProjectsEditorPage() {
                     <h1 className="text-2xl font-bold text-white flex items-center gap-2">
                         <FolderKanban className="h-6 w-6 text-primary" /> Projects & Case Studies
                     </h1>
-                    <p className="text-xs text-zinc-400 mt-1">Manage project case studies, reorder items, and mark featured project</p>
+                    <p className="text-xs text-zinc-400 mt-1">Manage project case studies, reorder items, and mark single featured project</p>
                 </div>
                 <Button variant="neon" size="sm" onClick={() => handleOpenModal()}>
                     <Plus className="h-4 w-4 mr-1" /> Add Project
@@ -270,18 +278,29 @@ export default function ProjectsEditorPage() {
                                                 onChange={(e) => setForm({ ...form, featured: e.target.checked })}
                                                 className="accent-primary h-4 w-4"
                                             />
-                                            <span className="text-xs font-semibold text-white">Set as Featured Hero Project</span>
+                                            <span className="text-xs font-semibold text-white">Set as Single Featured Project</span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div className="space-y-1">
-                                    <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Short Summary (Homepage card & preview)</label>
+                                    <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Short Summary</label>
                                     <textarea
                                         rows={2}
                                         required
                                         value={form.description}
                                         onChange={(e) => setForm({ ...form, description: e.target.value })}
+                                        className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
+                                    />
+                                </div>
+
+                                <div className="space-y-1">
+                                    <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Key Highlights (3–5 bullet points, comma separated)</label>
+                                    <input
+                                        type="text"
+                                        value={form.key_highlights}
+                                        onChange={(e) => setForm({ ...form, key_highlights: e.target.value })}
+                                        placeholder="Sub-50ms latency, Audio lyrics sync, Ultra-light memory usage"
                                         className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                     />
                                 </div>
@@ -298,7 +317,6 @@ export default function ProjectsEditorPage() {
                                             rows={3}
                                             value={form.problem}
                                             onChange={(e) => setForm({ ...form, problem: e.target.value })}
-                                            placeholder="What problem did this project solve?"
                                             className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                         />
                                     </div>
@@ -308,7 +326,6 @@ export default function ProjectsEditorPage() {
                                             rows={3}
                                             value={form.solution}
                                             onChange={(e) => setForm({ ...form, solution: e.target.value })}
-                                            placeholder="How was the solution engineered?"
                                             className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                         />
                                     </div>
@@ -320,19 +337,17 @@ export default function ProjectsEditorPage() {
                                         type="text"
                                         value={form.key_features}
                                         onChange={(e) => setForm({ ...form, key_features: e.target.value })}
-                                        placeholder="Real-time sync, Audio visualizer, Transparent overlay"
                                         className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                     />
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="space-y-1">
-                                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">System Architecture Breakdown</label>
+                                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Architecture Breakdown</label>
                                         <textarea
                                             rows={3}
                                             value={form.architecture}
                                             onChange={(e) => setForm({ ...form, architecture: e.target.value })}
-                                            placeholder="Architecture overview & data flow"
                                             className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                         />
                                     </div>
@@ -341,28 +356,6 @@ export default function ProjectsEditorPage() {
                                         value={form.architecture_image}
                                         onChange={(url) => setForm({ ...form, architecture_image: url })}
                                     />
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Engineering Challenges</label>
-                                        <textarea
-                                            rows={2}
-                                            value={form.engineering_challenges}
-                                            onChange={(e) => setForm({ ...form, engineering_challenges: e.target.value })}
-                                            className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
-                                        />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Results & Metrics</label>
-                                        <textarea
-                                            rows={2}
-                                            value={form.results}
-                                            onChange={(e) => setForm({ ...form, results: e.target.value })}
-                                            placeholder="e.g. Saved 20 hours/week, 60 FPS performance"
-                                            className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
-                                        />
-                                    </div>
                                 </div>
 
                                 <div className="space-y-1">
@@ -385,7 +378,6 @@ export default function ProjectsEditorPage() {
                                             type="url"
                                             value={form.link}
                                             onChange={(e) => setForm({ ...form, link: e.target.value })}
-                                            placeholder="https://example.com"
                                             className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                         />
                                     </div>
@@ -395,7 +387,6 @@ export default function ProjectsEditorPage() {
                                             type="url"
                                             value={form.github_url}
                                             onChange={(e) => setForm({ ...form, github_url: e.target.value })}
-                                            placeholder="https://github.com/user/repo"
                                             className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                         />
                                     </div>
@@ -407,7 +398,6 @@ export default function ProjectsEditorPage() {
                                         type="text"
                                         value={form.technologies}
                                         onChange={(e) => setForm({ ...form, technologies: e.target.value })}
-                                        placeholder="Next.js, Tailwind, Node.js"
                                         className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary"
                                     />
                                 </div>

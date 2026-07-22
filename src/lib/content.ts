@@ -57,6 +57,7 @@ export async function getProjects() {
                     github_url: p.github_url,
                     description: p.description,
                     longDescription: p.long_description,
+                    key_highlights: p.key_highlights || [],
                     problem: p.problem,
                     solution: p.solution,
                     key_features: p.key_features || [],
@@ -75,7 +76,8 @@ export async function getProjects() {
     const local = await getLocalFallbackData();
     return (local.projects || []).map((p: any) => ({
         ...p,
-        slug: p.slug || p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
+        slug: p.slug || p.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+        key_highlights: p.key_highlights || []
     }));
 }
 

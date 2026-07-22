@@ -45,6 +45,7 @@ export const projectSchema = z.object({
     problem: z.string().optional(),
     solution: z.string().optional(),
     key_features: z.array(z.string()).default([]),
+    key_highlights: z.array(z.string()).default([]),
     architecture: z.string().optional(),
     architecture_image: z.string().optional(),
     engineering_challenges: z.string().optional(),

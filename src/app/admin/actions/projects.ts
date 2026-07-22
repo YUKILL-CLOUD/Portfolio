@@ -14,13 +14,20 @@ export async function saveProjectAction(formData: Record<string, any>) {
 
     const supabase = getSupabaseAdminClient();
     if (supabase) {
+        // If this project is set to featured, unset featured on all other projects first
+        if (validated.data.featured) {
+            await supabase.from('projects').update({ featured: false }).neq('id', validated.data.id || '00000000-0000-0000-0000-000000000000');
+        }
+
         const payload: any = {
             ...validated.data,
             updated_at: new Date().toISOString()
         };
+
         if (!payload.id || payload.id.trim() === '') {
             delete payload.id;
         }
+
         const { error } = await supabase.from('projects').upsert(payload);
         if (error) {
             return { success: false, message: error.message };
@@ -30,9 +37,15 @@ export async function saveProjectAction(formData: Record<string, any>) {
         const filePath = path.join(process.cwd(), 'src/data/portfolio.json');
         const content = JSON.parse(await fs.readFile(filePath, 'utf-8'));
         const existingIndex = content.projects.findIndex((p: any) => p.id === validated.data.id);
+
+        if (validated.data.featured) {
+            content.projects.forEach((p: any) => { p.featured = false; });
+        }
+
         const projectData = {
             id: validated.data.id || String(Date.now()),
             title: validated.data.title,
+            slug: validated.data.slug,
             category: validated.data.category,
             image: validated.data.image || '/zbudget.png',
             gallery: validated.data.gallery,
@@ -40,7 +53,9 @@ export async function saveProjectAction(formData: Record<string, any>) {
             github_url: validated.data.github_url,
             description: validated.data.description,
             longDescription: validated.data.long_description,
-            technologies: validated.data.technologies
+            key_highlights: validated.data.key_highlights,
+            technologies: validated.data.technologies,
+            featured: validated.data.featured
         };
 
         if (existingIndex >= 0) {
