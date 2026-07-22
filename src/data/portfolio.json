@@ -72,6 +72,39 @@
         "Prisma",
         "Render"
       ]
+    },
+    {
+      "id": "4",
+      "title": "VIP Scale Funnel & CRM Suite",
+      "category": "Marketing Automation",
+      "image": "/zbudget.png",
+      "link": "https://vipscale.com",
+      "description": "High-converting Kajabi & GoHighLevel sales funnel, email marketing pipeline, and CRM workflow.",
+      "longDescription": "Engineered an end-to-end client acquisition system combining Kajabi landing pages, automated GoHighLevel CRM workflows, and custom API webhooks. Streamlined lead tracking and automated follow-up sequences, resulting in an 85% boost in client response rates.",
+      "technologies": [
+        "Kajabi",
+        "GoHighLevel",
+        "Zapier",
+        "Tailwind CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "id": "5",
+      "title": "AI Creator Content Dashboard",
+      "category": "Web Application",
+      "image": "/tapalesvet.png",
+      "link": "https://github.com/YUKILL-CLOUD",
+      "description": "AI-driven content generation and social media management dashboard built for modern creators.",
+      "longDescription": "Developed a full-stack Next.js web application utilizing OpenAI GPT-4 API to generate marketing copy, schedule social media posts, and manage multimedia assets in real time. Features a responsive dark-mode user interface and analytics integration.",
+      "technologies": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "OpenAI API",
+        "Node.js"
+      ]
     }
   ],
   "experience": [

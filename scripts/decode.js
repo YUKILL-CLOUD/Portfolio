@@ -1,0 +1,1 @@
+const fs = require('fs'); const b64 = fs.readFileSync('scripts/b64.txt', 'utf8').trim(); fs.writeFileSync('src/app/admin/page.tsx', Buffer.from(b64, 'base64').toString('utf8'), 'utf8'); console.log('Done!');
